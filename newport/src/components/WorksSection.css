@@ -156,10 +156,11 @@
 
 .work-card {
   position: relative;
-  width: min(70vw, 900px);
-  aspect-ratio: 1.6;
+  width: min(74vw, 980px);
+  aspect-ratio: 2;
   pointer-events: none;
   font-family: var(--sans);
+  will-change: opacity;
 }
 
 .work-card__bracket {
@@ -219,6 +220,7 @@
   bottom: 24px;
   right: 24px;
   pointer-events: auto;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.45));
 }
 
 .work-card__category {

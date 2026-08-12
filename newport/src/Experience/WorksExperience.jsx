@@ -1,37 +1,74 @@
 import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial } from "@react-three/drei";
-import WorkFrame from "./components/WorkFrame";
+import WorksStage from "./components/WorksStage";
 
-export default function WorksExperience({ work, direction }) {
+// The cards float above a reflective floor anchored at the world origin.
+const CARD_Y = 1.55;
+const CAMERA_BASE = [0, 2.6, 10.5];
+const LOOK_TARGET = [0, 1, 0];
+const PARALLAX_STRENGTH = [0.3, 0.14]; // world units, x / y — kept small on purpose
+
+function CameraRig() {
+  useFrame((state, delta) => {
+    const { camera, pointer } = state;
+    const damp = Math.min(1, delta * 3);
+    const targetX = CAMERA_BASE[0] + pointer.x * PARALLAX_STRENGTH[0];
+    const targetY = CAMERA_BASE[1] - pointer.y * PARALLAX_STRENGTH[1];
+    camera.position.x += (targetX - camera.position.x) * damp;
+    camera.position.y += (targetY - camera.position.y) * damp;
+    camera.lookAt(LOOK_TARGET[0], LOOK_TARGET[1], LOOK_TARGET[2]);
+  });
+  return null;
+}
+
+export default function WorksExperience({ work }) {
   return (
     <Canvas
       dpr={[1, 2]}
       gl={{ antialias: true }}
-      camera={{ position: [0, 0, 7.4], fov: 32 }}
+      camera={{ position: CAMERA_BASE, fov: 36 }}
     >
-      <color attach="background" args={["#08080a"]} />
-      <fog attach="fog" args={["#08080a", 9, 17]} />
+      <color attach="background" args={["#050506"]} />
+      <fog attach="fog" args={["#050506", 12, 24]} />
 
-      <ambientLight intensity={0.6} />
-      <pointLight position={[-4, -1, 3]} intensity={25} color={work.accent} />
+      <CameraRig />
+
+      <ambientLight intensity={0.5} />
+      <pointLight position={[-4, 3.2, 3]} intensity={22} color={work.accent} />
+      <pointLight position={[4, 1.6, 4]} intensity={10} color="#ffffff" />
 
       <Suspense fallback={null}>
-        <WorkFrame key={work.id} work={work} direction={direction} />
+        <group position={[0, CARD_Y, 0]}>
+          <WorksStage work={work} />
+        </group>
       </Suspense>
 
-      <mesh position={[0, -2.05, -1]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[40, 40]} />
+      {/* Thin emissive bars: their only job is to streak color across the
+          reflective floor, cheap stand-ins for real neon signage. */}
+      <mesh position={[-3.1, 1.6, -1.2]}>
+        <planeGeometry args={[0.04, 2.2]} />
+        <meshBasicMaterial color={work.accent} toneMapped={false} />
+      </mesh>
+      <mesh position={[3.3, 1, -1.8]}>
+        <planeGeometry args={[0.04, 1.5]} />
+        <meshBasicMaterial color="#ffffff" toneMapped={false} transparent opacity={0.4} />
+      </mesh>
+
+      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[80, 80]} />
         <MeshReflectorMaterial
-          blur={[300, 100]}
+          blur={[400, 120]}
           resolution={512}
           mixBlur={1}
-          mixStrength={30}
-          roughness={1}
+          mixStrength={40}
+          mirror={0.15}
+          roughness={0.9}
           depthScale={1}
-          minDepthThreshold={0.85}
-          color="#08080a"
-          metalness={0.5}
+          minDepthThreshold={0.8}
+          maxDepthThreshold={1.4}
+          color="#020203"
+          metalness={0.6}
         />
       </mesh>
     </Canvas>

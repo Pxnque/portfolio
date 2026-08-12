@@ -5,25 +5,14 @@ import "./WorksSection.css";
 
 export default function WorksSection() {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
 
   const goNext = useCallback(() => {
-    setDirection(1);
     setIndex((i) => (i + 1) % worksData.length);
   }, []);
 
   const goPrev = useCallback(() => {
-    setDirection(-1);
     setIndex((i) => (i - 1 + worksData.length) % worksData.length);
   }, []);
-
-  const goToIndex = useCallback(
-    (target) => {
-      setDirection(target > index ? 1 : -1);
-      setIndex(target);
-    },
-    [index]
-  );
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -39,7 +28,7 @@ export default function WorksSection() {
   return (
     <section id="works" className="works-section">
       <div className="works-canvas">
-        <WorksExperience work={active} direction={direction} />
+        <WorksExperience work={active} />
       </div>
 
       <div className="works-ui">
@@ -79,7 +68,7 @@ export default function WorksSection() {
               type="button"
               className={`works-tick${i === index ? " is-active" : ""}`}
               style={{ "--accent": work.accent }}
-              onClick={() => goToIndex(i)}
+              onClick={() => setIndex(i)}
               aria-label={`Ir a ${work.title}`}
               aria-current={i === index}
             />
