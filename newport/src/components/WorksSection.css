@@ -65,6 +65,25 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
+  border: none;
+  font-family: inherit;
+}
+
+.works-pill--profile {
+  left: auto;
+  right: 32px;
+  transform: none;
+  pointer-events: auto;
+  cursor: pointer;
+  background: transparent;
+  color: var(--works-fg);
+  border: 1px solid var(--works-border);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.works-pill--profile:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .works-counter {
