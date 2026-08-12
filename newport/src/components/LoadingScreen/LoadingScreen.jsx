@@ -1,11 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
 import "./LoadingScreen.css";
 
+// useProgress only moves once something actually loads through Three's
+// loading manager (useTexture, useGLTF, etc). With no real assets in the
+// scene yet, `active` never turns true and `progress` stays frozen at 0,
+// so the screen never leaves "Cargando recursos...". These two timers
+// cover that: if nothing starts loading shortly after mount, treat it as
+// already loaded; if something starts but stalls, a longer safety timeout
+// still lets the user through.
+const NO_ASSETS_GRACE_MS = 500;
+const SAFETY_TIMEOUT_MS = 15000;
+
 const LoadingScreen = () => {
-  const { progress } = useProgress();
+  const { progress, active } = useProgress();
   const [isRevealed, setIsRevealed] = useState(false);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
+  const [forceReady, setForceReady] = useState(false);
+  const hasStartedRef = useRef(false);
+
+  useEffect(() => {
+    if (active) hasStartedRef.current = true;
+  }, [active]);
+
+  useEffect(() => {
+    const graceTimer = setTimeout(() => {
+      if (!hasStartedRef.current) setForceReady(true);
+    }, NO_ASSETS_GRACE_MS);
+    const safetyTimer = setTimeout(() => setForceReady(true), SAFETY_TIMEOUT_MS);
+
+    return () => {
+      clearTimeout(graceTimer);
+      clearTimeout(safetyTimer);
+    };
+  }, []);
+
+  const isLoading = !forceReady && progress < 100;
 
   const handleReveal = () => {
     setIsRevealed(true);
@@ -39,7 +69,7 @@ const LoadingScreen = () => {
               <span className="dialogue-label">SYSTEM</span>
             </div>
 
-            {progress < 100 ? (
+            {isLoading ? (
               <div className="dialogue-content">
                 <div
                   className={`instruction-container ${isRevealed ? "revealed" : ""}`}
