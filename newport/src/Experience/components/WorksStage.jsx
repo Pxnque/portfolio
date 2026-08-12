@@ -3,7 +3,7 @@ import WorkFrame from "./WorkFrame";
 
 // Keeps the outgoing and incoming WorkFrame mounted at the same time so
 // they can crossfade, instead of swapping instantly on index change.
-export default function WorksStage({ work }) {
+export default function WorksStage({ work, onInfoClick }) {
   const nextInstanceId = useRef(0);
   const [entries, setEntries] = useState(() => [
     { id: nextInstanceId.current++, work, phase: "entering" },
@@ -31,6 +31,7 @@ export default function WorksStage({ work }) {
           work={entry.work}
           phase={entry.phase}
           onExited={() => handleExited(entry.id)}
+          onInfoClick={onInfoClick}
         />
       ))}
     </>

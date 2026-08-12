@@ -1,4 +1,4 @@
-import { Suspense, useLayoutEffect, useRef, useState } from "react";
+import { Suspense, useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -46,14 +46,13 @@ function Cover({ work, materialRef }) {
 // phase: "entering" fades/slides in from the left, "exiting" fades/slides
 // out to the right. Both meshes and the Html overlay are driven by refs
 // (not React props) so per-frame updates never trigger a re-render.
-export default function WorkFrame({ work, phase, onExited }) {
+export default function WorkFrame({ work, phase, onExited, onInfoClick }) {
   const groupRef = useRef(null);
   const borderMatRef = useRef(null);
   const coverMatRef = useRef(null);
   const cardRef = useRef(null);
   const progress = useRef(0);
   const exitedRef = useRef(false);
-  const [showInfo, setShowInfo] = useState(false);
 
   const isExiting = phase === "exiting";
 
@@ -126,9 +125,9 @@ export default function WorkFrame({ work, phase, onExited }) {
             <div className="work-card__actions">
               <button
                 type="button"
-                className={`work-btn${showInfo ? " is-active" : ""}`}
-                onClick={() => setShowInfo((v) => !v)}
-                aria-expanded={showInfo}
+                className="work-btn"
+                onClick={() => onInfoClick?.()}
+                aria-haspopup="dialog"
               >
                 INFO
               </button>
@@ -141,10 +140,6 @@ export default function WorkFrame({ work, phase, onExited }) {
                 VISIT
               </a>
             </div>
-
-            {showInfo && (
-              <p className="work-card__description">{work.description}</p>
-            )}
           </div>
         </div>
       </Html>

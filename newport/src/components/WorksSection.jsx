@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import WorksExperience from "../Experience/WorksExperience";
+import WorkInfoModal from "./WorkInfoModal";
 import { worksData } from "../Experience/utils/worksData";
 import "./WorksSection.css";
 
 export default function WorksSection() {
   const [index, setIndex] = useState(0);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const goNext = useCallback(() => {
     setIndex((i) => (i + 1) % worksData.length);
@@ -23,12 +25,16 @@ export default function WorksSection() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [goNext, goPrev]);
 
+  useEffect(() => {
+    setInfoOpen(false);
+  }, [index]);
+
   const active = worksData[index];
 
   return (
     <section id="works" className="works-section">
       <div className="works-canvas">
-        <WorksExperience work={active} />
+        <WorksExperience work={active} onInfoClick={() => setInfoOpen(true)} />
       </div>
 
       <div className="works-ui">
@@ -75,6 +81,10 @@ export default function WorksSection() {
           ))}
         </div>
       </div>
+
+      {infoOpen && (
+        <WorkInfoModal work={active} onClose={() => setInfoOpen(false)} />
+      )}
     </section>
   );
 }

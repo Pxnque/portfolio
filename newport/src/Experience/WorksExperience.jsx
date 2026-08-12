@@ -22,7 +22,7 @@ function CameraRig() {
   return null;
 }
 
-export default function WorksExperience({ work }) {
+export default function WorksExperience({ work, onInfoClick }) {
   return (
     <Canvas
       dpr={[1, 2]}
@@ -40,7 +40,7 @@ export default function WorksExperience({ work }) {
 
       <Suspense fallback={null}>
         <group position={[0, CARD_Y, 0]}>
-          <WorksStage work={work} />
+          <WorksStage work={work} onInfoClick={onInfoClick} />
         </group>
       </Suspense>
 
