@@ -6,13 +6,16 @@ import "./WorksSection.css";
 
 export default function WorksSection() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [infoOpen, setInfoOpen] = useState(false);
 
   const goNext = useCallback(() => {
+    setDirection(1);
     setIndex((i) => (i + 1) % worksData.length);
   }, []);
 
   const goPrev = useCallback(() => {
+    setDirection(-1);
     setIndex((i) => (i - 1 + worksData.length) % worksData.length);
   }, []);
 
@@ -34,7 +37,11 @@ export default function WorksSection() {
   return (
     <section id="works" className="works-section">
       <div className="works-canvas">
-        <WorksExperience work={active} onInfoClick={() => setInfoOpen(true)} />
+        <WorksExperience
+          work={active}
+          direction={direction}
+          onInfoClick={() => setInfoOpen(true)}
+        />
       </div>
 
       <div className="works-ui">
@@ -74,7 +81,10 @@ export default function WorksSection() {
               type="button"
               className={`works-tick${i === index ? " is-active" : ""}`}
               style={{ "--accent": work.accent }}
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setDirection(i > index ? 1 : -1);
+                setIndex(i);
+              }}
               aria-label={`Ir a ${work.title}`}
               aria-current={i === index}
             />
