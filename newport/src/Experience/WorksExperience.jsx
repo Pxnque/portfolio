@@ -1,7 +1,17 @@
 import { Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial } from "@react-three/drei";
+import {
+  EffectComposer,
+  Bloom,
+  Noise,
+  Vignette,
+  ChromaticAberration,
+} from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 import WorksStage from "./components/WorksStage";
+import TextHologram from "./TextHologram";
+import Holograma from "./Hologram";
 
 // The cards float above a reflective floor anchored at the world origin.
 const CARD_Y = 1.55;
@@ -33,6 +43,42 @@ export default function WorksExperience({ work, onInfoClick }) {
       <fog attach="fog" args={["#050506", 12, 24]} />
 
       <CameraRig />
+      <TextHologram
+        text="삼성전자 멕시코 생산"
+        position={[-3, 2, -8]}
+        color="#9201CB"
+        fontSize={1.3}
+      />
+      <TextHologram
+        text="Currently learning rust"
+        position={[1, 5, -12]}
+        color="#a200ff"
+        fontSize={1.3}
+      />
+      <Holograma
+        position={[9, 4.85, -10.51]}
+        color="#FF5F1F"
+        scale={[6, 3, 1]}
+      />
+      <Holograma
+        position={[-9, 4.85, -6.51]}
+        color="#3717ee"
+        scale={[3, 9, 2]}
+      />
+      <EffectComposer>
+        <Bloom
+          luminanceThreshold={0.15}
+          luminanceSmoothing={0.9}
+          intensity={1.3}
+          mipmapBlur
+        />
+        <ChromaticAberration
+          offset={[0.0008, 0.0008]}
+          blendFunction={BlendFunction.NORMAL}
+        />
+        <Noise opacity={0.025} />
+        <Vignette eskil={false} offset={0.15} darkness={1.1} />
+      </EffectComposer>
 
       <ambientLight intensity={0.5} />
       <pointLight position={[-4, 3.2, 3]} intensity={22} color={work.accent} />
@@ -52,7 +98,12 @@ export default function WorksExperience({ work, onInfoClick }) {
       </mesh>
       <mesh position={[3.3, 1, -1.8]}>
         <planeGeometry args={[0.04, 1.5]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} transparent opacity={0.4} />
+        <meshBasicMaterial
+          color="#ffffff"
+          toneMapped={false}
+          transparent
+          opacity={0.4}
+        />
       </mesh>
 
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -67,7 +118,7 @@ export default function WorksExperience({ work, onInfoClick }) {
           depthScale={1}
           minDepthThreshold={0.8}
           maxDepthThreshold={1.4}
-          color="#020203"
+          color="#17171c"
           metalness={0.6}
         />
       </mesh>
