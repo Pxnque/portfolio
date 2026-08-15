@@ -4,7 +4,7 @@ import WorkInfoModal from "./WorkInfoModal";
 import { worksData } from "../Experience/utils/worksData";
 import "./WorksSection.css";
 
-export default function WorksSection({ onNavigateProfile, onArrived }) {
+export default function WorksSection({ onNavigateProfile }) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [infoOpen, setInfoOpen] = useState(false);
@@ -41,19 +41,20 @@ export default function WorksSection({ onNavigateProfile, onArrived }) {
           work={active}
           direction={direction}
           onInfoClick={() => setInfoOpen(true)}
-          onArrived={onArrived}
         />
       </div>
 
       <div className="works-ui">
-        <span className="works-pill">WORKS</span>
-        <button
-          type="button"
-          className="works-pill works-pill--profile"
-          onClick={onNavigateProfile}
-        >
-          PERFIL
-        </button>
+        <div className="works-pill-group">
+          <button
+            type="button"
+            className="works-pill works-pill--profile"
+            onClick={onNavigateProfile}
+          >
+            PROFILE
+          </button>
+          <span className="works-pill">WORKS</span>
+        </div>
 
         <div className="works-counter">
           <span className="works-counter__index">

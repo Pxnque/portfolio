@@ -19,9 +19,8 @@ function getScrollProgress() {
   return Math.min(1, Math.max(0, window.scrollY / max));
 }
 
-function CameraRig({ onArrived }) {
+function CameraRig() {
   const settleProgress = useRef(0);
-  const arrivedRef = useRef(false);
 
   useFrame((state, delta) => {
     const { camera, pointer } = state;
@@ -41,17 +40,12 @@ function CameraRig({ onArrived }) {
     camera.position.y = THREE.MathUtils.lerp(startY, restY, settle);
     camera.position.z = THREE.MathUtils.lerp(CAMERA_ENTRY_OFFSET[2], CAMERA_REST[2], settle);
     camera.lookAt(LOOK_TARGET[0], LOOK_TARGET[1] - scrollOffsetY, LOOK_TARGET[2]);
-
-    if (!arrivedRef.current && settleProgress.current >= 1) {
-      arrivedRef.current = true;
-      onArrived?.();
-    }
   });
 
   return null;
 }
 
-export default function ProfileExperience({ onArrived }) {
+export default function ProfileExperience() {
   return (
     <Canvas
       dpr={[1, 2]}
@@ -65,7 +59,7 @@ export default function ProfileExperience({ onArrived }) {
       <pointLight position={[-5, 6, 4]} intensity={18} color="#c084fc" />
       <pointLight position={[5, 3, 6]} intensity={10} color="#ffffff" />
 
-      <CameraRig onArrived={onArrived} />
+      <CameraRig />
 
       {/* Reserved for future Blender tech-skill models: one small GLTF
           per technology, loaded with useGLTF and positioned here to line

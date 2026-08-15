@@ -12,7 +12,7 @@ import "./LoadingScreen.css";
 const NO_ASSETS_GRACE_MS = 500;
 const SAFETY_TIMEOUT_MS = 15000;
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ onDismissed }) => {
   const { progress, active } = useProgress();
   const [isRevealed, setIsRevealed] = useState(false);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
@@ -43,6 +43,7 @@ const LoadingScreen = () => {
 
   const handleAnimationFinished = () => {
     setIsAnimationFinished(true);
+    onDismissed?.();
   };
 
   if (isAnimationFinished) {

@@ -16,6 +16,23 @@
   color: var(--profile-fg);
   font-family: var(--sans);
 }
+.profile-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  font-family: var(--mono);
+}
+.profile-pill-group {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+}
 
 .profile-canvas {
   position: fixed;
@@ -28,13 +45,22 @@
 }
 
 .profile-pill {
-  position: fixed;
-  top: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  cursor: pointer;
+ padding: 8px 22px;
+    border-radius: 999px;
+    /* background: var(--works-fg); */
+    color: var(--profile-accent);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: none;
+    font-family: inherit;
+}
+.profile-pill--works {
+   cursor: pointer;
+  background: transparent;
+  color: var(--works-fg);
   border: none;
+  transition: opacity 0.2s ease;
 }
 
 .profile-content {

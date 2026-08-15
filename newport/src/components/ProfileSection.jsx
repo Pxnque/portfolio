@@ -3,7 +3,7 @@ import ProfileExperience from "../Experience/ProfileExperience";
 import { profileData } from "../Experience/utils/profileData";
 import "./ProfileSection.css";
 
-export default function ProfileSection({ onNavigateWorks, onArrived }) {
+export default function ProfileSection({ onNavigateWorks }) {
   const { name, role, contact, education, languages, softSkills, techSkills } =
     profileData;
 
@@ -14,17 +14,20 @@ export default function ProfileSection({ onNavigateWorks, onArrived }) {
   return (
     <section id="profile" className="profile-section">
       <div className="profile-canvas">
-        <ProfileExperience onArrived={onArrived} />
+        <ProfileExperience />
       </div>
-
-      <button
-        type="button"
-        className="works-pill profile-pill"
-        onClick={onNavigateWorks}
-      >
-        WORKS
-      </button>
-
+      <div className="profile-ui">
+        <div className="profile-pill-group">
+          <span className="profile-pill">PROFILE </span>
+          <button
+            type="button"
+            className="profile-pill profile-pill--works"
+            onClick={onNavigateWorks}
+          >
+            WORKS
+          </button>
+        </div>
+      </div>
       <div className="profile-content">
         <header className="profile-hero">
           <div className="profile-photo" aria-hidden="true">
@@ -106,7 +109,10 @@ export default function ProfileSection({ onNavigateWorks, onArrived }) {
           <ul className="profile-tech-grid">
             {techSkills.map((skill) => (
               <li key={skill} className="profile-tech-slot">
-                <span className="profile-tech-slot__placeholder" aria-hidden="true" />
+                <span
+                  className="profile-tech-slot__placeholder"
+                  aria-hidden="true"
+                />
                 <span className="profile-tech-slot__label">{skill}</span>
               </li>
             ))}

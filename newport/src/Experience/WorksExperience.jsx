@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial } from "@react-three/drei";
 import {
@@ -32,16 +32,7 @@ function CameraRig() {
   return null;
 }
 
-export default function WorksExperience({ work, direction, onInfoClick, onArrived }) {
-  // No real settle animation on this side (WORKS has a static idle camera),
-  // but the transition screen still needs a signal to know when to lift,
-  // symmetric with ProfileExperience's arrival callback.
-  useEffect(() => {
-    const timer = setTimeout(() => onArrived?.(), 350);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+export default function WorksExperience({ work, direction, onInfoClick }) {
   return (
     <Canvas
       dpr={[1, 2]}

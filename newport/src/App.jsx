@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import WorksSection from "./components/WorksSection";
 import ProfileSection from "./components/ProfileSection";
 import TransitionScreen from "./components/TransitionScreen";
@@ -6,37 +6,52 @@ import "./App.css";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 
 function App() {
-  const [view, setView] = useState("works");
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [view, setView] = useState("profile");
+  const [navRequestId, setNavRequestId] = useState(0);
+  const [bootReady, setBootReady] = useState(false);
+  const pendingViewRef = useRef(null);
 
-  const goToProfile = useCallback(() => {
-    setIsTransitioning(true);
-    setView("profile");
-  }, []);
+  // Belt-and-suspenders: the WORKS/PERFIL buttons are physically unreachable
+  // behind the boot LoadingScreen anyway (it's a full-viewport, higher
+  // z-index overlay), but this keeps TransitionScreen's trigger from ever
+  // moving off 0 before the user has actually dismissed it.
+  const requestNavigate = useCallback(
+    (nextView) => {
+      if (!bootReady) return;
+      pendingViewRef.current = nextView;
+      setNavRequestId((n) => n + 1);
+    },
+    [bootReady],
+  );
 
-  const goToWorks = useCallback(() => {
-    setIsTransitioning(true);
-    setView("works");
-  }, []);
+  const goToProfile = useCallback(
+    () => requestNavigate("profile"),
+    [requestNavigate],
+  );
+  const goToWorks = useCallback(
+    () => requestNavigate("works"),
+    [requestNavigate],
+  );
 
-  const handleArrived = useCallback(() => {
-    setIsTransitioning(false);
+  // Fired by TransitionScreen once it's fully covering the viewport, so
+  // the (possibly heavy, new-Canvas-mounting) view swap happens hidden.
+  const handleCovered = useCallback(() => {
+    if (!pendingViewRef.current) return;
+    setView(pendingViewRef.current);
+    pendingViewRef.current = null;
   }, []);
 
   return (
     <>
-      <LoadingScreen />
+      <LoadingScreen onDismissed={() => setBootReady(true)} />
 
       {view === "works" ? (
-        <WorksSection onNavigateProfile={goToProfile} onArrived={handleArrived} />
+        <WorksSection onNavigateProfile={goToProfile} />
       ) : (
-        <ProfileSection onNavigateWorks={goToWorks} onArrived={handleArrived} />
+        <ProfileSection onNavigateWorks={goToWorks} />
       )}
 
-      <TransitionScreen
-        active={isTransitioning}
-        label={view === "profile" ? "Cargando Perfil..." : "Cargando Works..."}
-      />
+      <TransitionScreen trigger={navRequestId} onCovered={handleCovered} />
     </>
   );
 }
