@@ -1,11 +1,8 @@
 import { Canvas, useThree } from "@react-three/fiber";
-import { Grid, Text3D, Center, Outlines } from "@react-three/drei";
+import { Grid, Text3D, Center, Outlines, Image } from "@react-three/drei";
 import { profileData } from "./utils/profileData";
 import HoverGridTrail from "./HoverGridTrail";
-
-// A separate Canvas from WORKS on purpose: the nav transition is always
-// masked by TransitionScreen, so there's no visible seam between the two,
-// and keeping them independent means nothing here can regress WORKS.
+import photoPlaceholder from "../assets/pfp.jpeg";
 
 const GRID_COLORS = {
   background: "#1A1A1A",
@@ -15,35 +12,21 @@ const GRID_COLORS = {
   role: "#E9D5FF",
 };
 
-// --- Camera (static, no scroll/parallax movement) --------------------
-// CAMERA_POSITION: [x, y, z] where the camera sits in world space.
-//   - y: height above the plane.
-//   - z: how far back the camera is pulled from the plane's center.
-// CAMERA_LOOK_AT: [x, y, z] point the camera aims at (keep y at 0 to
-//   look at the plane's surface).
-// The look-down angle is atan((CAMERA_POSITION.y - CAMERA_LOOK_AT.y) /
-// (CAMERA_POSITION.z - CAMERA_LOOK_AT.z)) — currently 45deg since Y and Z
-// are equal (14 and 14). Adjust either value to change the angle.
 const CAMERA_POSITION = [0, 14, 10];
 const CAMERA_LOOK_AT = [4, 4, 0];
 
 const PLANE_SIZE = 160;
 
-// --- Name text (Text3D) -----------------------------------------------
-// Font is a local typeface JSON (drei's Text3D needs the facetype.js
-// format, not a regular .ttf/.otf) served from public/fonts.
-// NAME_TEXT_POSITION / NAME_TEXT_SIZE are separate from the camera
-// constants above so you can tune the text placement independently.
 const NAME_FONT_URL = "/fonts/helvetiker_bold.typeface.json";
 const NAME_TEXT_POSITION = [4, 1, -10];
 const NAME_TEXT_SIZE = 1.3;
 const NAME_TEXT_DEPTH = 0.18;
 
-// Shared "leaning sign" tilt for every hero text block (name, apellido,
-// role, role2). It's applied to the Text3D itself, inside a group that
-// handles that block's own position/yaw, so the same lean shows up no
-// matter which way a given block is turned to face.
 const TEXT_TILT = [-Math.PI / 2 + 0.7, 0, 0];
+
+const PHOTO_POSITION = [0, 0.1, -2.3];
+const PHOTO_SIZE = 5;
+const PHOTO_RADIUS = 0.08;
 
 export default function ProfileExperience() {
   return (
@@ -64,17 +47,12 @@ export default function ProfileExperience() {
       />
       <pointLight position={[5, 3, 6]} intensity={10} color="#ffffff" />
 
-      {/* Reserved for future Blender tech-skill models: one small GLTF
-          per technology, loaded with useGLTF and positioned here. */}
       <group name="tech-skills-models" position={[0, -18, 0]} />
 
-      {/* Solid base plane, with a fading grid/wireframe layered just above
-          it so the lines never z-fight with the surface underneath. */}
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[PLANE_SIZE, PLANE_SIZE]} />
         <meshBasicMaterial color={GRID_COLORS.plane} toneMapped={false} />
       </mesh>
-      {/* <OrbitControls /> */}
       <Center position={NAME_TEXT_POSITION}>
         <Text3D
           font={NAME_FONT_URL}
@@ -109,6 +87,16 @@ export default function ProfileExperience() {
           <Outlines thickness={0.035} color="#000000" screenspace />
         </Text3D>
       </Center>
+
+      <group position={PHOTO_POSITION} rotation={[-Math.PI / 2, 0, 0]}>
+        <Image
+          url={photoPlaceholder}
+          scale={PHOTO_SIZE}
+          radius={PHOTO_RADIUS}
+          zoom={1.5}
+        />
+      </group>
+
       <group position={[12, 1, -4.5]} rotation={[0, -1.5, 0]}>
         <Center>
           <Text3D
@@ -162,7 +150,11 @@ export default function ProfileExperience() {
         infiniteGrid
       />
 
-      <HoverGridTrail planeSize={PLANE_SIZE} cellSize={1} position={[0, 0.02, 0]} />
+      <HoverGridTrail
+        planeSize={PLANE_SIZE}
+        cellSize={1}
+        position={[0, 0.02, 0]}
+      />
     </Canvas>
   );
 }
