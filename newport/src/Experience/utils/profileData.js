@@ -6,8 +6,10 @@
 // contact.email is already your real address from this project's context.
 
 export const profileData = {
-  name: "Tu Nombre Completo",
-  role: "Fullstack Software Developer",
+  name: "Francisco Emiliano",
+  apellido: "Flores Chavez",
+  role: "Fullstack",
+  role2: "Software Developer",
   contact: {
     email: "panque08@outlook.es",
     github: "https://github.com/tu-usuario",

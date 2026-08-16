@@ -55,6 +55,9 @@
     border: none;
     font-family: inherit;
 }
+.profile-pill:hover{
+  opacity: 0.7;
+}
 .profile-pill--works {
    cursor: pointer;
   background: transparent;
