@@ -1,6 +1,7 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { Grid, Text3D, Center, Outlines } from "@react-three/drei";
 import { profileData } from "./utils/profileData";
+import HoverGridTrail from "./HoverGridTrail";
 
 // A separate Canvas from WORKS on purpose: the nav transition is always
 // masked by TransitionScreen, so there's no visible seam between the two,
@@ -160,6 +161,8 @@ export default function ProfileExperience() {
         fadeStrength={1.5}
         infiniteGrid
       />
+
+      <HoverGridTrail planeSize={PLANE_SIZE} cellSize={1} position={[0, 0.02, 0]} />
     </Canvas>
   );
 }
