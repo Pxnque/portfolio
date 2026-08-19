@@ -3,6 +3,10 @@ import { Grid, Text3D, Center, Outlines, Image } from "@react-three/drei";
 import { profileData } from "./utils/profileData";
 import HoverGridTrail from "./HoverGridTrail";
 import photoPlaceholder from "../assets/pfp.jpeg";
+import CorreoD from "../Experience/components/icons/CorreoD";
+import GithubD from "../Experience/components/icons/CorreoD";
+import PersonaD from "../Experience/components/icons/CorreoD";
+import LinkedinD from "../Experience/components/icons/CorreoD";
 
 const GRID_COLORS = {
   background: "#1A1A1A",
@@ -135,7 +139,10 @@ export default function ProfileExperience() {
           </Text3D>
         </Center>
       </group>
-
+      <CorreoD position={[0, 0, 0]} />
+      <GithubD />
+      <LinkedinD />
+      <PersonaD />
       <Grid
         position={[0, 0.01, 0]}
         args={[PLANE_SIZE, PLANE_SIZE]}
