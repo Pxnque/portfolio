@@ -1,20 +1,13 @@
-// Placeholder data for the WORKS carousel.
-// Drop a real image per work by importing it and setting `image`, e.g.:
-//   import cover from '../../assets/works/aurora-lab.jpg'
-//   { ...work, image: cover }
-// Works without `image` render a tinted placeholder panel so the layout
-// stays correct while real covers are produced.
-
 export const worksData = [
   {
     id: "aurora-lab",
-    title: "Aurora Lab",
-    category: "Brand Experience",
-    tag: "FEATURED",
-    accent: "#ff3366",
-    stack: ["React", "Three.js", "GSAP"],
+    title: "Samsung Electronics México Production",
+    category: "Jan 2026- Jul 2026",
+    tag: "RECENT",
+    accent: "#1428A0",
+    stack: ["PHP", "Javascript", "jQuery","Chart.js"],
     description:
-      "Interactive brand site built around a generative light system. Placeholder copy, swap for the real case study summary.",
+      "Designed and implemented a Full Stack system using PHP, jQuery, and MariaDB to digitize spare parts issuance records, eliminating data-entry errors and improving information management. Developed a dashboard with Chart.js for data visualization. Rebuilt the application using Go and HTMX after the original codebase was retained by Samsung",
     url: "#",
     image: null,
   },
@@ -26,9 +19,9 @@ export const worksData = [
     accent: "#22d3ee",
     stack: ["React", "WebGL", "Node.js"],
     description:
-      "Launch site for a sleep-tracking wearable, with a WebGL product configurator. Placeholder copy, swap for the real case study summary.",
+      "Designed and implemented a Full Stack system using PHP, jQuery, and MariaDB to digitize spare parts issuance records, eliminating data-entry errors and improving information management. Developed a dashboard with Chart.js for data visualization. Rebuilt the application using Go and HTMX after the original codebase was retained by Samsung",
     url: "#",
-    image: null,
+    image: "/public/imgs/samsung.png",
   },
   {
     id: "vantage",

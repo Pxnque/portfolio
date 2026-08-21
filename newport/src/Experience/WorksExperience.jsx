@@ -86,7 +86,11 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
 
       <Suspense fallback={null}>
         <group position={[0, CARD_Y, 0]}>
-          <WorksStage work={work} direction={direction} onInfoClick={onInfoClick} />
+          <WorksStage
+            work={work}
+            direction={direction}
+            onInfoClick={onInfoClick}
+          />
         </group>
       </Suspense>
 
@@ -118,7 +122,7 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
           depthScale={1}
           minDepthThreshold={0.8}
           maxDepthThreshold={1.4}
-          color="#17171c"
+          color="#534846"
           metalness={0.6}
         />
       </mesh>

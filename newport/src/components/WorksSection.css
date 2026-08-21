@@ -44,7 +44,6 @@
   display: block;
 }
 
-/* ---------- DOM chrome (arrows, counter, ticks) ---------- */
 
 .works-ui {
   position: absolute;
@@ -174,7 +173,7 @@
   background: var(--accent, var(--works-fg));
 }
 
-/* ---------- In-canvas HTML overlay (drei Html, rendered per WorkFrame) ---------- */
+
 
 .work-card {
   position: relative;
@@ -185,40 +184,9 @@
   will-change: opacity;
 }
 
-.work-card__bracket {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  opacity: 0.85;
-}
 
-.work-card__bracket--tl {
-  top: -10px;
-  left: -10px;
-  border-top: 2px solid var(--works-fg);
-  border-left: 2px solid var(--works-fg);
-}
 
-.work-card__bracket--tr {
-  top: -10px;
-  right: -10px;
-  border-top: 2px solid var(--works-fg);
-  border-right: 2px solid var(--works-fg);
-}
 
-.work-card__bracket--bl {
-  bottom: -10px;
-  left: -10px;
-  border-bottom: 2px solid var(--works-fg);
-  border-left: 2px solid var(--works-fg);
-}
-
-.work-card__bracket--br {
-  bottom: -10px;
-  right: -10px;
-  border-bottom: 2px solid var(--works-fg);
-  border-right: 2px solid var(--works-fg);
-}
 
 .work-card__tag {
   position: absolute;

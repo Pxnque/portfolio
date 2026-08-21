@@ -1,19 +1,14 @@
-// Placeholder profile data. Replace with real info:
-//   - name / role: your own copy
-//   - contact.github / contact.linkedin: your real profile URLs
-//   - photo: import an image and wire it into ProfileSection's photo slot
-//   - education / languages / softSkills / techSkills: your real entries
-// contact.email is already your real address from this project's context.
-
 export const profileData = {
   name: "Francisco Emiliano",
   apellido: "Flores Chavez",
   role: "Fullstack",
   role2: "Software Developer",
+  // Shown in the modal opened by the Persona icon. Replace with your own bio.
+  bio: "Soon to be Computer Systems Engineer with experience building full stack applications using PHP, Laravel and React. I like to play videogames and discover new techonologies in my free time.",
   contact: {
-    email: "panque08@outlook.es",
-    github: "https://github.com/tu-usuario",
-    linkedin: "https://linkedin.com/in/tu-usuario",
+    email: "feflores0308@outlook.com",
+    github: "https://github.com/Pxnque",
+    linkedin: "https://linkedin.com/in/fcoemiliano",
   },
   education: [
     {
@@ -40,7 +35,5 @@ export const profileData = {
     "Adaptabilidad",
     "Gestión del tiempo",
   ],
-  // Each entry gets an empty 3D slot in ProfileExperience's
-  // "tech-skills-models" group, ready for a Blender GLTF per technology.
   techSkills: ["React", "JavaScript", "Three.js", "Node.js", "Laravel", "PHP"],
 };

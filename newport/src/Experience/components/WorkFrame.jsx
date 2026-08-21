@@ -22,13 +22,23 @@ function shade(hex, percent) {
 function CoverImage({ src, materialRef }) {
   const texture = useTexture(src);
   return (
-    <meshBasicMaterial ref={materialRef} map={texture} toneMapped={false} transparent />
+    <meshBasicMaterial
+      ref={materialRef}
+      map={texture}
+      toneMapped={false}
+      transparent
+    />
   );
 }
 
 function CoverPlaceholder({ accent, materialRef }) {
   return (
-    <meshBasicMaterial ref={materialRef} color={shade(accent, -95)} toneMapped={false} transparent />
+    <meshBasicMaterial
+      ref={materialRef}
+      color={shade(accent, -95)}
+      toneMapped={false}
+      transparent
+    />
   );
 }
 
@@ -37,7 +47,11 @@ function Cover({ work, materialRef }) {
     return <CoverPlaceholder accent={work.accent} materialRef={materialRef} />;
   }
   return (
-    <Suspense fallback={<CoverPlaceholder accent={work.accent} materialRef={materialRef} />}>
+    <Suspense
+      fallback={
+        <CoverPlaceholder accent={work.accent} materialRef={materialRef} />
+      }
+    >
       <CoverImage src={work.image} materialRef={materialRef} />
     </Suspense>
   );
@@ -48,7 +62,13 @@ function Cover({ work, materialRef }) {
 // enters from the left and exits to the right, prev is the mirror image.
 // Both meshes and the Html overlay are driven by refs (not React props) so
 // per-frame updates never trigger a re-render.
-export default function WorkFrame({ work, phase, direction = 1, onExited, onInfoClick }) {
+export default function WorkFrame({
+  work,
+  phase,
+  direction = 1,
+  onExited,
+  onInfoClick,
+}) {
   const groupRef = useRef(null);
   const borderMatRef = useRef(null);
   const coverMatRef = useRef(null);
@@ -104,7 +124,12 @@ export default function WorkFrame({ work, phase, direction = 1, onExited, onInfo
     <group ref={groupRef}>
       <mesh position={[0, 0, -0.02]}>
         <planeGeometry args={[FRAME_WIDTH + 0.08, FRAME_HEIGHT + 0.08]} />
-        <meshBasicMaterial ref={borderMatRef} color={work.accent} toneMapped={false} transparent />
+        <meshBasicMaterial
+          ref={borderMatRef}
+          color={work.accent}
+          toneMapped={false}
+          transparent
+        />
       </mesh>
 
       <mesh>
@@ -112,13 +137,17 @@ export default function WorkFrame({ work, phase, direction = 1, onExited, onInfo
         <Cover work={work} materialRef={coverMatRef} />
       </mesh>
 
-      <Html center occlude={false} position={[0, 0, 0.05]} zIndexRange={[10, 0]}>
-        <div ref={cardRef} className="work-card" style={{ "--accent": work.accent }}>
-          <span className="work-card__bracket work-card__bracket--tl" />
-          <span className="work-card__bracket work-card__bracket--tr" />
-          <span className="work-card__bracket work-card__bracket--bl" />
-          <span className="work-card__bracket work-card__bracket--br" />
-
+      <Html
+        center
+        occlude={false}
+        position={[0, 0, 0.05]}
+        zIndexRange={[10, 0]}
+      >
+        <div
+          ref={cardRef}
+          className="work-card"
+          style={{ "--accent": work.accent }}
+        >
           {work.tag && <span className="work-card__tag">{work.tag}</span>}
 
           <div className="work-card__bottom">
