@@ -375,17 +375,72 @@
 }
 
 @media (max-width: 720px) {
+  /* Desktop assumes a tall box (aspect-ratio: 2 at ~980px wide) with the
+     bottom block absolutely positioned, so there's always hundreds of px of
+     clearance below the top-right tag. At mobile widths that same ratio
+     yields a box far shorter than the title/tag/button content needs, so
+     the absolutely-positioned bottom block overflowed past the top of its
+     own box. Let the card grow to fit its content instead, and clamp the
+     title to 2 lines so a long title can't blow the height out further. */
   .work-card {
     width: min(86vw, 900px);
+    aspect-ratio: auto;
+    padding-top: 52px;
+  }
+
+  .work-card__bottom {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    padding: 0 24px 24px;
   }
 
   .work-card__title {
-    font-size: clamp(24px, 8vw, 36px);
+    font-size: clamp(20px, 6.5vw, 30px);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .works-pill-group {
+    top: 18px;
+    gap: 10px;
   }
 
   .works-pill {
-    top: 18px;
-    font-size: 11px;
-    padding: 6px 16px;
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  /* Bump tap targets toward the ~44px minimum recommended for touch. */
+  .works-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .work-btn {
+    padding: 13px 20px;
+    font-size: 14px;
+  }
+
+  .works-tick {
+    width: 6px;
+  }
+
+  .work-modal {
+    padding: 20px;
+  }
+
+  .work-modal__close {
+    width: 44px;
+    height: 44px;
+    top: -56px;
+  }
+
+  .work-modal__description {
+    font-size: 16px;
   }
 }

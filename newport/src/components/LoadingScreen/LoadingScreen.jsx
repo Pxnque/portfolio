@@ -2,13 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
 import "./LoadingScreen.css";
 
-// useProgress only moves once something actually loads through Three's
-// loading manager (useTexture, useGLTF, etc). With no real assets in the
-// scene yet, `active` never turns true and `progress` stays frozen at 0,
-// so the screen never leaves "Cargando recursos...". These two timers
-// cover that: if nothing starts loading shortly after mount, treat it as
-// already loaded; if something starts but stalls, a longer safety timeout
-// still lets the user through.
 const NO_ASSETS_GRACE_MS = 500;
 const SAFETY_TIMEOUT_MS = 15000;
 
@@ -27,7 +20,10 @@ const LoadingScreen = ({ onDismissed }) => {
     const graceTimer = setTimeout(() => {
       if (!hasStartedRef.current) setForceReady(true);
     }, NO_ASSETS_GRACE_MS);
-    const safetyTimer = setTimeout(() => setForceReady(true), SAFETY_TIMEOUT_MS);
+    const safetyTimer = setTimeout(
+      () => setForceReady(true),
+      SAFETY_TIMEOUT_MS,
+    );
 
     return () => {
       clearTimeout(graceTimer);
@@ -90,7 +86,7 @@ const LoadingScreen = ({ onDismissed }) => {
                 <div
                   className={`instruction-container ${isRevealed ? "revealed" : ""}`}
                 >
-                  Usa el scroll/Touch para avanzar
+                  Portfolio loaded correctly
                 </div>
                 <div className="reveal-button">
                   <button onClick={handleReveal}>INICIAR</button>

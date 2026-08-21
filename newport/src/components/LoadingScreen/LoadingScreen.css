@@ -64,7 +64,7 @@
 
 .dialogue-box {
   position: relative;
-  width: 600px;
+  width: min(600px, 90vw);
   min-height: 180px;
   background: linear-gradient(
     135deg,
@@ -85,7 +85,7 @@
 .dialogue-box2 {
   position: absolute;
   transform: translate(10px) rotate(-4deg);
-  width: 600px;
+  width: min(600px, 90vw);
   min-height: 180px;
   background: linear-gradient(
     135deg,
@@ -172,7 +172,7 @@
 
 
 .loading-bar-container {
-  width: 350px;
+  width: min(350px, 75vw);
   height: 24px;
   border: 2px solid rgba(0, 150, 255, 0.6);
   background: rgba(0, 0, 0, 0.4);
@@ -259,5 +259,19 @@
   50% {
     opacity: 0.3;
     transform: translateY(4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .dialogue-content {
+    padding: 44px 20px 24px;
+  }
+
+  .instruction-container {
+    font-size: 16px;
+  }
+
+  .reveal-button button {
+    padding: 14px 32px; /* keeps the tap target comfortable at ~44px+ tall */
   }
 }

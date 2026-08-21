@@ -1,7 +1,9 @@
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Grid, Text3D, Center, Outlines, Image } from "@react-three/drei";
 import { profileData } from "./utils/profileData";
 import HoverGridTrail from "./HoverGridTrail";
+import { getResponsiveFraming } from "./utils/responsiveFov";
+import { useIsMobile } from "./utils/useIsMobile";
 import photoPlaceholder from "../assets/pfp.jpeg";
 import CorreoD from "../Experience/components/icons/CorreoD";
 import GithubD from "../Experience/components/icons/GithubD";
@@ -20,6 +22,42 @@ const GRID_COLORS = {
 const CAMERA_POSITION = [0, 14, 10];
 const CAMERA_LOOK_AT = [4, 4, 0];
 
+const MOBILE_LOOK_AT = [-0.5, 4, 0];
+
+const CAMERA_OFFSET = CAMERA_POSITION.map((v, i) => v - CAMERA_LOOK_AT[i]);
+
+const CAMERA_BASE_FOV = 38;
+const CAMERA_BASE_ASPECT = 16 / 9;
+const CAMERA_MAX_FOV = 60;
+const CAMERA_MAX_DISTANCE_SCALE = 2;
+
+function ResponsiveCamera({ isMobile }) {
+  useFrame((state) => {
+    const { camera, size } = state;
+    const lookAt = isMobile ? MOBILE_LOOK_AT : CAMERA_LOOK_AT;
+
+    const { fovDeg, distanceScale: rawScale } = getResponsiveFraming(
+      CAMERA_BASE_FOV,
+      CAMERA_BASE_ASPECT,
+      size.width / size.height,
+      CAMERA_MAX_FOV,
+    );
+    const distanceScale = Math.min(rawScale, CAMERA_MAX_DISTANCE_SCALE);
+
+    if (Math.abs(camera.fov - fovDeg) > 0.01) {
+      camera.fov = fovDeg;
+      camera.updateProjectionMatrix();
+    }
+    camera.position.set(
+      lookAt[0] + CAMERA_OFFSET[0] * distanceScale,
+      lookAt[1] + CAMERA_OFFSET[1] * distanceScale,
+      lookAt[2] + CAMERA_OFFSET[2] * distanceScale,
+    );
+    camera.lookAt(...lookAt);
+  });
+  return null;
+}
+
 const PLANE_SIZE = 160;
 
 const NAME_FONT_URL = "/fonts/helvetiker_bold.typeface.json";
@@ -32,18 +70,6 @@ const TEXT_TILT = [-Math.PI / 2 + 0.7, 0, 0];
 const PHOTO_POSITION = [0, 0.1, -2.3];
 const PHOTO_SIZE = 5;
 const PHOTO_RADIUS = 0.08;
-
-// --- Contact icons (Blender GLB models) ---------------------------------
-// Each icon gets its own position/rotation/scale so you can move and turn
-// them independently:
-//   position: [x, y, z] in world units, same axes as everything else here.
-//   rotation: [x, y, z] in RADIANS, not degrees — use fractions of Math.PI
-//     (Math.PI / 2 = 90deg, Math.PI = 180deg, Math.PI / 4 = 45deg).
-// This rotation is applied on top of the [Math.PI/2, 0, 0] baked inside
-// each gltfjsx-generated component (that inner one just corrects for how
-// the mesh was oriented in Blender — leave it alone, tweak these instead).
-// scale is shared since all four icons came from the same export batch;
-// split it per-icon if one needs to be a different size.
 const ICON_SCALE = 0.25;
 const ICON_CORREO = {
   position: [0.6, 0.8, 0.4],
@@ -62,28 +88,39 @@ const ICON_PERSONA = {
   rotation: [-Math.PI / 2, 0, 0],
 };
 
-// Roughly centered above the icon cluster above ([x,z] average of the four
-// ICON_* positions) so all four are lit evenly. Move it if you reposition
-// the icons a lot.
 const ICONS_LIGHT_POSITION = [1.3, 4.5, -0.4];
 const ICONS_LIGHT_INTENSITY = 35;
 
-// Glow color per icon on hover — change any of these to customize.
 const GLOW_CORREO = GRID_COLORS.section;
 const GLOW_GITHUB = "#ffffff";
 const GLOW_LINKEDIN = "#0A66C2";
 const GLOW_PERSONA = GRID_COLORS.section;
 
+const ROLE_X = { desktop: 12, mobile: 8 };
+const ROLE2_X = { desktop: 10.5, mobile: 6.5 };
+const ROLE_Z = { desktop: -1.5, mobile: -1 };
+const ROLE2_Z = { desktop: -1, mobile: -0.5 };
+const TAMANO = { desktop: 0.8, mobile: 0.7 };
+
 export default function ProfileExperience({ onOpenPersonaInfo }) {
+  const isMobile = useIsMobile();
+  const roleX = isMobile ? ROLE_X.mobile : ROLE_X.desktop;
+  const role2X = isMobile ? ROLE2_X.mobile : ROLE2_X.desktop;
+  const roleZ = isMobile ? ROLE_Z.mobile : ROLE_Z.desktop;
+  const role2Z = isMobile ? ROLE2_Z.mobile : ROLE2_Z.desktop;
+  const tamano = isMobile ? TAMANO.mobile : TAMANO.desktop;
+
   return (
     <Canvas
-      dpr={[1, 2]}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
       gl={{ antialias: true }}
-      camera={{ position: CAMERA_POSITION, fov: 38 }}
+      camera={{ position: CAMERA_POSITION, fov: CAMERA_BASE_FOV }}
       onCreated={({ camera }) => camera.lookAt(...CAMERA_LOOK_AT)}
     >
       <color attach="background" args={[GRID_COLORS.background]} />
       <fog attach="fog" args={[GRID_COLORS.background, 20, 55]} />
+
+      <ResponsiveCamera isMobile={isMobile} />
 
       <ambientLight intensity={0.55} />
       <pointLight
@@ -148,11 +185,11 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
         />
       </group>
 
-      <group position={[12, 1, -1.5]} rotation={[0, -1.5, 0]}>
+      <group position={[roleX, 1, roleZ]} rotation={[0, -1.5, 0]}>
         <Center>
           <Text3D
             font={NAME_FONT_URL}
-            size={0.8}
+            size={tamano}
             height={NAME_TEXT_DEPTH}
             rotation={[-Math.PI / 2 + 0.9, 0, 0]}
             curveSegments={12}
@@ -167,11 +204,11 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
           </Text3D>
         </Center>
       </group>
-      <group position={[10.5, 1, -1]} rotation={[0, -1.5, 0]}>
+      <group position={[role2X, 1, role2Z]} rotation={[0, -1.5, 0]}>
         <Center>
           <Text3D
             font={NAME_FONT_URL}
-            size={0.8}
+            size={tamano}
             height={NAME_TEXT_DEPTH}
             rotation={[-Math.PI / 2 + 0.9, 0, 0]}
             curveSegments={12}

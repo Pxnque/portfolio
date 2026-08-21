@@ -12,16 +12,34 @@ import { BlendFunction } from "postprocessing";
 import WorksStage from "./components/WorksStage";
 import TextHologram from "./TextHologram";
 import Holograma from "./Hologram";
+import { getResponsiveFov } from "./utils/responsiveFov";
+import { useIsMobile } from "./utils/useIsMobile";
 
-// The cards float above a reflective floor anchored at the world origin.
 const CARD_Y = 1.55;
 const CAMERA_BASE = [0, 2.6, 10.5];
 const LOOK_TARGET = [0, 1, 0];
 const PARALLAX_STRENGTH = [0.3, 0.14]; // world units, x / y — kept small on purpose
 
+const CAMERA_BASE_FOV = 36;
+const CAMERA_BASE_ASPECT = 16 / 9;
+
+const CAMERA_MAX_FOV = 66;
+
 function CameraRig() {
   useFrame((state, delta) => {
-    const { camera, pointer } = state;
+    const { camera, pointer, size } = state;
+
+    const targetFov = getResponsiveFov(
+      CAMERA_BASE_FOV,
+      CAMERA_BASE_ASPECT,
+      size.width / size.height,
+      CAMERA_MAX_FOV,
+    );
+    if (Math.abs(camera.fov - targetFov) > 0.01) {
+      camera.fov = targetFov;
+      camera.updateProjectionMatrix();
+    }
+
     const damp = Math.min(1, delta * 3);
     const targetX = CAMERA_BASE[0] + pointer.x * PARALLAX_STRENGTH[0];
     const targetY = CAMERA_BASE[1] - pointer.y * PARALLAX_STRENGTH[1];
@@ -33,11 +51,13 @@ function CameraRig() {
 }
 
 export default function WorksExperience({ work, direction, onInfoClick }) {
+  const isMobile = useIsMobile();
+
   return (
     <Canvas
-      dpr={[1, 2]}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
       gl={{ antialias: true }}
-      camera={{ position: CAMERA_BASE, fov: 36 }}
+      camera={{ position: CAMERA_BASE, fov: CAMERA_BASE_FOV }}
     >
       <color attach="background" args={["#050506"]} />
       <fog attach="fog" args={["#050506", 12, 24]} />
@@ -65,20 +85,24 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
         color="#3717ee"
         scale={[3, 9, 2]}
       />
-      <EffectComposer>
-        <Bloom
-          luminanceThreshold={0.15}
-          luminanceSmoothing={0.9}
-          intensity={1.3}
-          mipmapBlur
-        />
-        <ChromaticAberration
-          offset={[0.0008, 0.0008]}
-          blendFunction={BlendFunction.NORMAL}
-        />
-        <Noise opacity={0.025} />
-        <Vignette eskil={false} offset={0.15} darkness={1.1} />
-      </EffectComposer>
+      {/* Postprocessing is a handful of extra full-screen passes — skip it
+          on mobile GPUs rather than risk a choppy/hot phone. */}
+      {!isMobile && (
+        <EffectComposer>
+          <Bloom
+            luminanceThreshold={0.15}
+            luminanceSmoothing={0.9}
+            intensity={1.3}
+            mipmapBlur
+          />
+          <ChromaticAberration
+            offset={[0.0008, 0.0008]}
+            blendFunction={BlendFunction.NORMAL}
+          />
+          <Noise opacity={0.025} />
+          <Vignette eskil={false} offset={0.15} darkness={1.1} />
+        </EffectComposer>
+      )}
 
       <ambientLight intensity={0.5} />
       <pointLight position={[-4, 3.2, 3]} intensity={22} color={work.accent} />
