@@ -4,7 +4,7 @@ export const worksData = [
     title: "Samsung Electronics México Production",
     category: "Jan 2026- Jul 2026",
     tag: "Internship",
-    accent: "#1428A0",
+    accent: "#c084fc",
     stack: ["PHP", "Javascript", "jQuery","Chart.js"],
     description:
       "Designed and implemented a Full Stack system using PHP, jQuery, and MariaDB to digitize spare parts issuance records, eliminating data-entry errors and improving information management. Developed a dashboard with Chart.js for data visualization. Rebuilt the application using Go and HTMX after the original codebase was retained by Samsung",
@@ -16,7 +16,7 @@ export const worksData = [
     title: "Centro de Lenguas Extranjeras",
     category: "Jan 2025 - June 2025",
     tag: "Social Service",
-    accent: "#22d3ee",
+    accent: "#c084fc",
     stack: ["Laravel", "Livewire", "Blade"],
     description:
       "Developed and implemented both front‑end and back‑end modules for Students and Profesors. Created Models, Migrations and Seeders for core parts of the application",

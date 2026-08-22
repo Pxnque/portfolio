@@ -11,10 +11,6 @@ function App() {
   const [bootReady, setBootReady] = useState(false);
   const pendingViewRef = useRef(null);
 
-  // Belt-and-suspenders: the WORKS/PERFIL buttons are physically unreachable
-  // behind the boot LoadingScreen anyway (it's a full-viewport, higher
-  // z-index overlay), but this keeps TransitionScreen's trigger from ever
-  // moving off 0 before the user has actually dismissed it.
   const requestNavigate = useCallback(
     (nextView) => {
       if (!bootReady) return;
@@ -33,8 +29,6 @@ function App() {
     [requestNavigate],
   );
 
-  // Fired by TransitionScreen once it's fully covering the viewport, so
-  // the (possibly heavy, new-Canvas-mounting) view swap happens hidden.
   const handleCovered = useCallback(() => {
     if (!pendingViewRef.current) return;
     setView(pendingViewRef.current);

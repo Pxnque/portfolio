@@ -7,9 +7,6 @@ const LIFT_DAMPING = 8; // higher = snappier elevate/settle
 const GLOW_SIZE = 1.8; // glow sprite scale relative to the icon
 const GLOW_MAX_OPACITY = 0.85;
 
-// Soft white radial-gradient sprite, generated once and shared by every
-// icon. Color comes from spriteMaterial's own `color` (white texture *
-// color = that color), so the same texture works for any glowColor.
 let sharedGlowTexture = null;
 function getGlowTexture() {
   if (sharedGlowTexture) return sharedGlowTexture;
@@ -19,8 +16,12 @@ function getGlowTexture() {
   canvas.height = size;
   const ctx = canvas.getContext("2d");
   const gradient = ctx.createRadialGradient(
-    size / 2, size / 2, 0,
-    size / 2, size / 2, size / 2
+    size / 2,
+    size / 2,
+    0,
+    size / 2,
+    size / 2,
+    size / 2,
   );
   gradient.addColorStop(0, "rgba(255,255,255,1)");
   gradient.addColorStop(0.4, "rgba(255,255,255,0.55)");
@@ -31,11 +32,6 @@ function getGlowTexture() {
   return sharedGlowTexture;
 }
 
-// Wraps a Blender/GLTF icon model with: hover -> lift on Y + glow (color
-// customizable per instance via glowColor), and a click that either opens
-// `url` in a new tab, or — if no url is given — calls `onIconClick`
-// (used by Persona to open a modal instead of navigating).
-// Position/rotation/scale go on this wrapper, not on the icon model.
 export default function InteractiveIcon({
   position = [0, 0, 0],
   rotation = [0, 0, 0],
@@ -52,11 +48,6 @@ export default function InteractiveIcon({
   const hoverAmount = useRef(0);
   const [hovered, setHovered] = useState(false);
 
-  // Each Blender export can have its own pivot/origin baked into the mesh
-  // (depending on whether "origin to geometry" was set before exporting),
-  // so a hardcoded local offset for the glow doesn't line up with every
-  // model. Instead, measure the model's actual bounding box once it's
-  // loaded (useGLTF suspends until then) and center the glow on that.
   useLayoutEffect(() => {
     if (!modelRef.current || !liftRef.current || !glowMeshRef.current) return;
     modelRef.current.updateWorldMatrix(true, true);
@@ -76,7 +67,12 @@ export default function InteractiveIcon({
 
   useFrame((_, delta) => {
     const target = hovered ? 1 : 0;
-    hoverAmount.current = THREE.MathUtils.damp(hoverAmount.current, target, LIFT_DAMPING, delta);
+    hoverAmount.current = THREE.MathUtils.damp(
+      hoverAmount.current,
+      target,
+      LIFT_DAMPING,
+      delta,
+    );
 
     if (liftRef.current) {
       liftRef.current.position.y = hoverAmount.current * HOVER_LIFT;

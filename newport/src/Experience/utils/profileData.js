@@ -3,7 +3,7 @@ export const profileData = {
   apellido: "Flores Chavez",
   role: "Fullstack",
   role2: "Software Developer",
-  // Shown in the modal opened by the Persona icon. Replace with your own bio.
+
   bio: "Soon to be Computer Systems Engineer with experience building full stack applications using PHP, Laravel and React. I like to play videogames and discover new techonologies in my free time.",
   contact: {
     email: "feflores0308@outlook.com",

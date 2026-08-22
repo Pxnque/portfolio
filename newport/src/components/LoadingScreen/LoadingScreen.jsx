@@ -85,9 +85,7 @@ const LoadingScreen = ({ onDismissed }) => {
               <div className="dialogue-content">
                 <div
                   className={`instruction-container ${isRevealed ? "revealed" : ""}`}
-                >
-                  Portfolio loaded correctly
-                </div>
+                ></div>
                 <div className="reveal-button">
                   <button onClick={handleReveal}>INICIAR</button>
                 </div>

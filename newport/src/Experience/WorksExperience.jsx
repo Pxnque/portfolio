@@ -63,7 +63,7 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
       <fog attach="fog" args={["#050506", 12, 24]} />
 
       <CameraRig />
-      <TextHologram
+      {/* <TextHologram
         text="삼성전자 멕시코 생산"
         position={[-3, 2, -8]}
         color="#9201CB"
@@ -74,7 +74,7 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
         position={[1, 5, -12]}
         color="#a200ff"
         fontSize={1.3}
-      />
+      /> */}
       <Holograma
         position={[9, 4.85, -10.51]}
         color="#FF5F1F"

@@ -57,11 +57,6 @@ function Cover({ work, materialRef }) {
   );
 }
 
-// phase: "entering" fades/slides in, "exiting" fades/slides out. direction
-// (1 = next, -1 = prev) flips which side that motion happens on: next
-// enters from the left and exits to the right, prev is the mirror image.
-// Both meshes and the Html overlay are driven by refs (not React props) so
-// per-frame updates never trigger a re-render.
 export default function WorkFrame({
   work,
   phase,
@@ -88,8 +83,6 @@ export default function WorkFrame({
     if (borderMatRef.current) borderMatRef.current.opacity = startOpacity;
     if (coverMatRef.current) coverMatRef.current.opacity = startOpacity;
     if (cardRef.current) cardRef.current.style.opacity = String(startOpacity);
-    // Only a phase or direction change should reset the animation.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, dir]);
 
   useFrame((_, delta) => {
