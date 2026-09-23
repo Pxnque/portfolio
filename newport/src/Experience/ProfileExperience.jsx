@@ -22,8 +22,9 @@ const GRID_COLORS = {
 const CAMERA_POSITION = [0, 14, 10];
 const CAMERA_LOOK_AT = [4, 4, 0];
 
-const MOBILE_LOOK_AT = [-0.5, 4, 0];
-
+// Fixed once from the desktop position/look-at so the camera keeps the same
+// viewing angle everywhere; mobile only changes where it aims and how far
+// back it sits along that angle.
 const CAMERA_OFFSET = CAMERA_POSITION.map((v, i) => v - CAMERA_LOOK_AT[i]);
 
 const CAMERA_BASE_FOV = 38;
@@ -31,18 +32,42 @@ const CAMERA_BASE_ASPECT = 16 / 9;
 const CAMERA_MAX_FOV = 60;
 const CAMERA_MAX_DISTANCE_SCALE = 2;
 
+const MOBILE_FOV = 50;
+const MOBILE_LOOK_AT = [0.42, 0.5, -1.11];
+const MOBILE_FIT_WIDTH = { a: 0.318, b: 0.614 };
+const MOBILE_FIT_HEIGHT = 1.064;
+
+function getCameraFraming(isMobile, aspect) {
+  if (isMobile) {
+    return {
+      fovDeg: MOBILE_FOV,
+      lookAt: MOBILE_LOOK_AT,
+      distanceScale: Math.max(
+        MOBILE_FIT_WIDTH.a + MOBILE_FIT_WIDTH.b / aspect,
+        MOBILE_FIT_HEIGHT,
+      ),
+    };
+  }
+  const { fovDeg, distanceScale } = getResponsiveFraming(
+    CAMERA_BASE_FOV,
+    CAMERA_BASE_ASPECT,
+    aspect,
+    CAMERA_MAX_FOV,
+  );
+  return {
+    fovDeg,
+    lookAt: CAMERA_LOOK_AT,
+    distanceScale: Math.min(distanceScale, CAMERA_MAX_DISTANCE_SCALE),
+  };
+}
+
 function ResponsiveCamera({ isMobile }) {
   useFrame((state) => {
     const { camera, size } = state;
-    const lookAt = isMobile ? MOBILE_LOOK_AT : CAMERA_LOOK_AT;
-
-    const { fovDeg, distanceScale: rawScale } = getResponsiveFraming(
-      CAMERA_BASE_FOV,
-      CAMERA_BASE_ASPECT,
+    const { fovDeg, lookAt, distanceScale } = getCameraFraming(
+      isMobile,
       size.width / size.height,
-      CAMERA_MAX_FOV,
     );
-    const distanceScale = Math.min(rawScale, CAMERA_MAX_DISTANCE_SCALE);
 
     if (Math.abs(camera.fov - fovDeg) > 0.01) {
       camera.fov = fovDeg;
@@ -96,19 +121,30 @@ const GLOW_GITHUB = "#ffffff";
 const GLOW_LINKEDIN = "#0A66C2";
 const GLOW_PERSONA = GRID_COLORS.section;
 
-const ROLE_X = { desktop: 12, mobile: 8 };
-const ROLE2_X = { desktop: 10.5, mobile: 6.5 };
-const ROLE_Z = { desktop: -1.5, mobile: -1 };
-const ROLE2_Z = { desktop: -1, mobile: -0.5 };
-const TAMANO = { desktop: 0.8, mobile: 0.7 };
+const LAYOUT = {
+  desktop: {
+    nameSize: NAME_TEXT_SIZE,
+    name: NAME_TEXT_POSITION,
+    apellido: [2.3, 1, -7],
+    roleSize: 0.8,
+    roleYaw: -1.5,
+    role: [12, 1, -1.5],
+    role2: [10.5, 1, -1],
+  },
+  mobile: {
+    nameSize: 0.85,
+    name: [6, 1, -8.6],
+    apellido: [4.2, 1, -6.6],
+    roleSize: 0.55,
+    roleYaw: 0,
+    role: [-2.1, 1, 2.4],
+    role2: [0.28, 1, 3.65],
+  },
+};
 
 export default function ProfileExperience({ onOpenPersonaInfo }) {
   const isMobile = useIsMobile();
-  const roleX = isMobile ? ROLE_X.mobile : ROLE_X.desktop;
-  const role2X = isMobile ? ROLE2_X.mobile : ROLE2_X.desktop;
-  const roleZ = isMobile ? ROLE_Z.mobile : ROLE_Z.desktop;
-  const role2Z = isMobile ? ROLE2_Z.mobile : ROLE2_Z.desktop;
-  const tamano = isMobile ? TAMANO.mobile : TAMANO.desktop;
+  const layout = isMobile ? LAYOUT.mobile : LAYOUT.desktop;
 
   return (
     <Canvas
@@ -141,10 +177,10 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
         <planeGeometry args={[PLANE_SIZE, PLANE_SIZE]} />
         <meshBasicMaterial color={GRID_COLORS.plane} toneMapped={false} />
       </mesh>
-      <Center position={NAME_TEXT_POSITION}>
+      <Center position={layout.name}>
         <Text3D
           font={NAME_FONT_URL}
-          size={NAME_TEXT_SIZE}
+          size={layout.nameSize}
           rotation={TEXT_TILT}
           height={NAME_TEXT_DEPTH}
           curveSegments={12}
@@ -158,10 +194,10 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
           <Outlines thickness={0.035} color="#000000" screenspace />
         </Text3D>
       </Center>
-      <Center position={[2.3, 1, -7]}>
+      <Center position={layout.apellido}>
         <Text3D
           font={NAME_FONT_URL}
-          size={NAME_TEXT_SIZE}
+          size={layout.nameSize}
           height={NAME_TEXT_DEPTH}
           rotation={TEXT_TILT}
           curveSegments={12}
@@ -185,11 +221,11 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
         />
       </group>
 
-      <group position={[roleX, 1, roleZ]} rotation={[0, -1.5, 0]}>
+      <group position={layout.role} rotation={[0, layout.roleYaw, 0]}>
         <Center>
           <Text3D
             font={NAME_FONT_URL}
-            size={tamano}
+            size={layout.roleSize}
             height={NAME_TEXT_DEPTH}
             rotation={[-Math.PI / 2 + 0.9, 0, 0]}
             curveSegments={12}
@@ -204,11 +240,11 @@ export default function ProfileExperience({ onOpenPersonaInfo }) {
           </Text3D>
         </Center>
       </group>
-      <group position={[role2X, 1, role2Z]} rotation={[0, -1.5, 0]}>
+      <group position={layout.role2} rotation={[0, layout.roleYaw, 0]}>
         <Center>
           <Text3D
             font={NAME_FONT_URL}
-            size={tamano}
+            size={layout.roleSize}
             height={NAME_TEXT_DEPTH}
             rotation={[-Math.PI / 2 + 0.9, 0, 0]}
             curveSegments={12}
