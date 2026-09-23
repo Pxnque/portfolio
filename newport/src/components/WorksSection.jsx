@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import WorksExperience from "../Experience/WorksExperience";
 import WorkInfoModal from "./WorkInfoModal";
 import { worksData } from "../Experience/utils/worksData";
+import { profileData } from "../Experience/utils/profileData";
 import "./WorksSection.css";
 
 export default function WorksSection({ onNavigateProfile }) {
@@ -54,6 +55,14 @@ export default function WorksSection({ onNavigateProfile }) {
             PROFILE
           </button>
           <span className="works-pill">WORKS</span>
+          <a
+            className="works-pill works-pill--profile works-pill--link"
+            href={profileData.cv.url}
+            download={profileData.cv.fileName}
+            type="application/pdf"
+          >
+            CV
+          </a>
         </div>
 
         <div className="works-counter">
