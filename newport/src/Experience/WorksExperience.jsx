@@ -18,6 +18,8 @@ import { useIsMobile } from "./utils/useIsMobile";
 const CARD_Y = 1.55;
 const CAMERA_BASE = [0, 2.6, 10.5];
 const LOOK_TARGET = [0, 1, 0];
+
+const MOBILE_LOOK_TARGET = [0, -0.2, 0];
 const PARALLAX_STRENGTH = [0.3, 0.14]; // world units, x / y — kept small on purpose
 
 const CAMERA_BASE_FOV = 36;
@@ -25,7 +27,9 @@ const CAMERA_BASE_ASPECT = 16 / 9;
 
 const CAMERA_MAX_FOV = 66;
 
-function CameraRig() {
+function CameraRig({ isMobile }) {
+  const lookTarget = isMobile ? MOBILE_LOOK_TARGET : LOOK_TARGET;
+
   useFrame((state, delta) => {
     const { camera, pointer, size } = state;
 
@@ -45,7 +49,7 @@ function CameraRig() {
     const targetY = CAMERA_BASE[1] - pointer.y * PARALLAX_STRENGTH[1];
     camera.position.x += (targetX - camera.position.x) * damp;
     camera.position.y += (targetY - camera.position.y) * damp;
-    camera.lookAt(LOOK_TARGET[0], LOOK_TARGET[1], LOOK_TARGET[2]);
+    camera.lookAt(lookTarget[0], lookTarget[1], lookTarget[2]);
   });
   return null;
 }
@@ -62,7 +66,7 @@ export default function WorksExperience({ work, direction, onInfoClick }) {
       <color attach="background" args={["#050506"]} />
       <fog attach="fog" args={["#050506", 12, 24]} />
 
-      <CameraRig />
+      <CameraRig isMobile={isMobile} />
       {/* <TextHologram
         text="삼성전자 멕시코 생산"
         position={[-3, 2, -8]}

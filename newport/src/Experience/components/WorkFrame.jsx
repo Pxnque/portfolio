@@ -2,6 +2,7 @@ import { Suspense, useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { useIsMobile } from "../utils/useIsMobile";
 
 export const FRAME_WIDTH = 5.4;
 export const FRAME_HEIGHT = 2.7;
@@ -70,6 +71,7 @@ export default function WorkFrame({
   const cardRef = useRef(null);
   const progress = useRef(0);
   const exitedRef = useRef(false);
+  const isMobile = useIsMobile();
 
   const isExiting = phase === "exiting";
   const dir = direction === -1 ? -1 : 1;
@@ -131,20 +133,27 @@ export default function WorkFrame({
       </mesh>
 
       <Html
-        center
+        center={!isMobile}
         occlude={false}
-        position={[0, 0, 0.05]}
+        position={isMobile ? [0, -FRAME_HEIGHT / 2, 0.05] : [0, 0, 0.05]}
         zIndexRange={[10, 0]}
       >
         <div
           ref={cardRef}
-          className="work-card"
+          className={`work-card${isMobile ? " work-card--stacked" : ""}`}
           style={{ "--accent": work.accent }}
         >
-          {work.tag && <span className="work-card__tag">{work.tag}</span>}
+          {!isMobile && work.tag && (
+            <span className="work-card__tag">{work.tag}</span>
+          )}
 
           <div className="work-card__bottom">
-            <p className="work-card__category">{work.category}</p>
+            <div className="work-card__meta">
+              <p className="work-card__category">{work.category}</p>
+              {isMobile && work.tag && (
+                <span className="work-card__tag">{work.tag}</span>
+              )}
+            </div>
             <h3 className="work-card__title">{work.title}</h3>
 
             <div className="work-card__actions">
