@@ -133,12 +133,12 @@ const LAYOUT = {
   },
   mobile: {
     nameSize: 0.85,
-    name: [6, 1, -8.6],
-    apellido: [4.2, 1, -6.6],
+    name: [3.6, 1, -8.6],
+    apellido: [2.2, 1, -6.6],
     roleSize: 0.55,
     roleYaw: 0,
-    role: [-2.1, 1, 2.4],
-    role2: [0.28, 1, 3.65],
+    role: [-2.7, 1, 2.4],
+    role2: [-0.8, 1, 3.65],
   },
 };
 
