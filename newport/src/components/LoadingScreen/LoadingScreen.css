@@ -1,8 +1,4 @@
-/* LoadingScreen.css — Solo los estilos nuevos/modificados */
 
-/* ============================================
-   ESTILOS ORIGINALES (SIN TOCAR)
-   ============================================ */
 
 .loading-screen {
   position: absolute;
@@ -44,6 +40,19 @@
 
 .background-rectangle-accent.revealed {
   transform: skewX(-12deg) translateX(-100%);
+}
+
+
+@media (max-width: 768px) {
+  .background-rectangle {
+    left: -40%;
+    width: 180%;
+  }
+
+  .background-rectangle-accent {
+    left: -40%;
+    width: 200%;
+  }
 }
 
 
