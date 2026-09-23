@@ -86,7 +86,7 @@ function ResponsiveCamera({ isMobile }) {
 const PLANE_SIZE = 160;
 
 const NAME_FONT_URL = "/fonts/helvetiker_bold.typeface.json";
-const NAME_TEXT_POSITION = [2, 1, -10];
+const NAME_TEXT_POSITION = [3, 1, -10];
 const NAME_TEXT_SIZE = 1.3;
 const NAME_TEXT_DEPTH = 0.18;
 
