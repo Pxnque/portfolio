@@ -23,6 +23,14 @@ export default function ProfileSection({ onNavigateWorks }) {
           >
             WORKS
           </button>
+          <a
+            className="profile-pill profile-pill--works profile-pill--link"
+            href={profileData.cv.url}
+            download={profileData.cv.fileName}
+            type="application/pdf"
+          >
+            CV
+          </a>
         </div>
       </div>
 

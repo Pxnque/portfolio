@@ -66,6 +66,13 @@
   transition: opacity 0.2s ease;
 }
 
+
+.profile-pill--link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
 .profile-content {
   position: relative;
   z-index: 5;

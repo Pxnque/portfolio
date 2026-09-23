@@ -10,6 +10,11 @@ export const profileData = {
     github: "https://github.com/Pxnque",
     linkedin: "https://linkedin.com/in/fcoemiliano",
   },
+  
+  cv: {
+    url: "/docs/emiliano-flores-cv.pdf",
+    fileName: "EmilianoFlores_CV.pdf",
+  },
   education: [
     {
       id: "edu-1",
