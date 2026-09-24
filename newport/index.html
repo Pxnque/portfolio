@@ -29,17 +29,48 @@
   <script type="module" src="/src/main.jsx"></script>
   <script type="application/ld+json">
   {
-    
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://emiflores.dev/#website",
+        "url": "https://emiflores.dev/",
+        "name": "Emi Flores",
+        "alternateName": "Francisco Emiliano Flores Chávez Portfolio",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://emiflores.dev/#person" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://emiflores.dev/#person",
+        "name": "Francisco Emiliano Flores Chávez",
+        "alternateName": ["Emi Flores", "Francisco Emiliano Flores Chavez"],
+        "url": "https://emiflores.dev/",
+        "jobTitle": "Fullstack Software Developer",
+        "description": "Computer Systems Engineer and full-stack developer based in Mexico, building software with JavaScript, Java, PHP, Laravel and more.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "MX"
+        },
+        "knowsAbout": ["JavaScript", "Java", "PHP", "Laravel", "React", "Three.js", "Node.js"],
+        "sameAs": [
+          "https://github.com/Pxnque",
+          "https://www.linkedin.com/in/fcoemiliano"
+        ]
+      }
+    ]
   }
   </script>
   <noscript>
     <h1>Hi! I'm Francisco Emiliano Flores Chávez, a Computer Systems Engineer and full-stack developer based in Mexico.
-      I enjoy turning ideas into functional software and exploring the technologies behind them. My work has given me
+    </h1>
+    <p>I enjoy turning ideas into functional software and exploring the technologies behind them. My work has given me
       experience across web development, databases, system design, and technical documentation, while my curiosity keeps
       me learning and experimenting with new tools and approaches.
       I've worked with national and multinational companies, developing software solutions with technologies such as
       JavaScript, Java, PHP, Laravel, and more.
-    </h1>
+    </p>
+
   </noscript>
 </body>
 
